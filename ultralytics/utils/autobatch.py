@@ -82,7 +82,7 @@ def autobatch(model, imgsz=640, fraction=0.60, batch_size=DEFAULT_CFG.batch):
 
         fraction = (np.polyval(p, b) + r + a) / t  # actual fraction predicted
         LOGGER.info(f"{prefix}Using batch-size {b} for {d} {t * fraction:.2f}G/{t:.2f}G ({fraction * 100:.0f}%) ✅")
-        return b
+        return min(b, 32)  # cap batch_size at 32
     except Exception as e:
         LOGGER.warning(f"{prefix}WARNING ⚠️ error detected: {e},  using default batch-size {batch_size}.")
         return batch_size
