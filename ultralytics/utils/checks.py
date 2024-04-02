@@ -255,7 +255,7 @@ def check_version(
     return result
 
 
-def check_latest_pypi_version(package_name="ultralytics"):
+def check_latest_pypi_version(package_name="syml-ultralytics"):
     """
     Returns the latest version of a PyPI package without downloading or installing it.
 
@@ -287,7 +287,7 @@ def check_pip_update_available():
             if check_version(__version__, f"<{latest}"):  # check if current version is < latest version
                 LOGGER.info(
                     f"New https://pypi.org/project/ultralytics/{latest} available 😃 "
-                    f"Update with 'pip install -U ultralytics'"
+                    f"Update with 'pip install -U syml-ultralytics'"
                 )
                 return True
     return False
