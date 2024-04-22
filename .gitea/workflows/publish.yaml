@@ -31,8 +31,7 @@ jobs:
       - name: Publish to Gitea SyPI Registry
         run: |
           ${{ steps.cp311.outputs.python-path }} -m build
-          ${{ steps.cp311.outputs.python-path }} -m twine upload dist/* --repository-url https://jenkins:3000/api/packages/SYNENTEC/pypi -u BuildMaster -p ${{ secrets.BUILDMASTER_PAT }} --cert "\\SYNENTEC-SV01\works$\004 -- Software Development\Tools\Build\Gitea.pem
-"
+          ${{ steps.cp311.outputs.python-path }} -m twine upload dist/* --repository-url https://jenkins:3000/api/packages/SYNENTEC/pypi -u BuildMaster -p ${{ secrets.BUILDMASTER_PAT }} --cert "\\SYNENTEC-SV01\works$\004 -- Software Development\Tools\Build\Gitea.pem"
       - name: Publish to PyPI
         run: |
           ${{ steps.cp311.outputs.python-path }} -m build
