@@ -1,9 +1,6 @@
 name: Publish to Gitea SyPI Registry and PyPI
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
     inputs:
       pypi:
@@ -12,6 +9,7 @@ on:
       gitea:
         type: boolean
         description: Publish to Gitea SyPI
+  push:
 
 defaults:
   run:
@@ -23,7 +21,10 @@ jobs:
     runs-on: windows
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+          token: ${{ secrets.BUILDMASTER_PAT }} 
       - name: Set up Python environment
         uses: actions/setup-python@v5
         id: cp311
