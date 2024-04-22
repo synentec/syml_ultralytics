@@ -2,6 +2,8 @@ name: Publish to Gitea SyPI Registry and PyPI
 
 on:
   push:
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       pypi:
@@ -33,35 +35,13 @@ jobs:
           ${{ steps.cp311.outputs.python-path }} -m ensurepip
           ${{ steps.cp311.outputs.python-path }} -m pip install --upgrade pip wheel build twine --no-warn-script-location
           # ${{ steps.cp311.outputs.python-path }} -m pip install -e ".[dev]" --extra-index-url https://download.pytorch.org/whl/cpu --no-warn-script-location
-      # - name: Check PyPI version
-      #   shell: python
-      #   run: |
-      #     import os
-      #     import sys
-      #     print(sys.executable)
-      #     import ultralytics
-      #     from ultralytics.utils.checks import check_latest_pypi_version
-
-      #     v_local = tuple(map(int, ultralytics.__version__.split('.')))
-      #     v_pypi = tuple(map(int, check_latest_pypi_version().split('.')))
-      #     print(f'Local version is {v_local}')
-      #     print(f'PyPI version is {v_pypi}')
-      #     d = [a - b for a, b in zip(v_local, v_pypi)]  # diff
-      #     increment = (d[0] == d[1] == 0) and (d[2] >= 1)  # only publish if patch version increments by 1 or 2
-      #     os.system(f'echo "increment={increment}" >> $GITEA_OUTPUT')
-      #     os.system(f'echo "version={ultralytics.__version__}" >> $GITEA_OUTPUT')
-      #     if increment:
-      #         print('Local version is higher than PyPI version. Publishing new version to PyPI ✅.')
-      #   id: check_pypi
       - name: Publish to Gitea SyPI Registry
-        if: gitea.event_name == 'push' || gitea.event.inputs.gitea == 'true'
         env:
           GITEA_PYPI_TOKEN: ${{ secrets.BUILDMASTER_PAT }}
         run: |
           ${{ steps.cp311.outputs.python-path }} -m build
           ${{ steps.cp311.outputs.python-path }} -m twine upload dist/* --repository-url https://jenkins:3000/api/packages/SYNENTEC/pypi -u BuildMaster -p $GITEA_PYPI_TOKEN
       - name: Publish to PyPI
-        if: gitea.event_name == 'push' || gitea.event.inputs.pypi == 'true'
         env:
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
         run: |
