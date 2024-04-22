@@ -1,15 +1,7 @@
 name: Publish to Gitea SyPI Registry and PyPI
 
 on:
-  workflow_dispatch:
-    inputs:
-      pypi:
-        type: boolean
-        description: Publish to PyPI
-      gitea:
-        type: boolean
-        description: Publish to Gitea SyPI
-  push:
+  push
 
 defaults:
   run:
