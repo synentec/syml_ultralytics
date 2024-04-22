@@ -29,14 +29,10 @@ jobs:
           ${{ steps.cp311.outputs.python-path }} -m pip install --upgrade pip wheel build twine --no-warn-script-location
           # ${{ steps.cp311.outputs.python-path }} -m pip install -e ".[dev]" --extra-index-url https://download.pytorch.org/whl/cpu --no-warn-script-location
       - name: Publish to Gitea SyPI Registry
-        env:
-          GITEA_PYPI_TOKEN: ${{ secrets.BUILDMASTER_PAT }}
         run: |
           ${{ steps.cp311.outputs.python-path }} -m build
-          ${{ steps.cp311.outputs.python-path }} -m twine upload dist/* --repository-url https://jenkins:3000/api/packages/SYNENTEC/pypi -u BuildMaster -p $GITEA_PYPI_TOKEN
+          ${{ steps.cp311.outputs.python-path }} -m twine upload dist/* --repository-url https://jenkins:3000/api/packages/SYNENTEC/pypi -uBuildMaster -p${{ secrets.BUILDMASTER_PAT }}
       - name: Publish to PyPI
-        env:
-          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
         run: |
           ${{ steps.cp311.outputs.python-path }} -m build
-          ${{ steps.cp311.outputs.python-path }} -m twine upload dist/* -u __token__ -p $PYPI_TOKEN
+          ${{ steps.cp311.outputs.python-path }} -m twine upload dist/* -u__token__ -p${{ secrets.PYPI_TOKEN }}
